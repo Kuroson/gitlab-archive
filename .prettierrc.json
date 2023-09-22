@@ -1,0 +1,27 @@
+{
+    "printWidth": 120,
+    "trailingComma": "all",
+    "tabWidth": 4,
+    "semi": true,
+    "singleQuote": false,
+    "useTabs": false,
+    "proseWrap": "preserve",
+    "importOrderSeparation": false,
+    "importOrderSortSpecifiers": true,
+    "importOrder": [
+        "<THIRD_PARTY_MODULES>",
+        "@extensions(/)?(.*)$",
+        "@redis(/)?(.*)$",
+        "@util(/)?(.*)$",
+        "@services(/)?(.*)$",
+        "^[./]"
+    ],
+    "overrides": [
+        {
+            "files": ["*.yml", "*.yaml"],
+            "options": {
+                "tabWidth": 2
+            }
+        }
+    ]
+}

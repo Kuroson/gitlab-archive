@@ -1,0 +1,7 @@
+.github
+.vscode
+backup
+dist
+logs
+node_modules
+.env
