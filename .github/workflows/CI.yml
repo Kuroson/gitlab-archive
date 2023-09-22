@@ -36,7 +36,7 @@ jobs:
     env:
       GITHUB_NAME: "GitHub Actions"
       GITHUB_EMAIL: "actions@github.com"
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -62,7 +62,7 @@ jobs:
   CD:
     runs-on: ubuntu-latest
     needs: [CI, versioning]
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
