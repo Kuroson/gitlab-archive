@@ -65,6 +65,12 @@ async function createFolder(path: string): Promise<void> {
     }
 }
 
+/**
+ * Clone a repo to `destPath`
+ * @param https_clone https remote url to clone
+ * @param destPath destination path
+ * @returns
+ */
 function createClonePromise(https_clone: string, destPath): Promise<string> {
     return new Promise<string>((resolve, reject) => {
         const command = `git clone ${https_clone}`.replace("https://", `https://oauth2:${validateEnv.GITLAB_TOKEN}@`);
@@ -77,6 +83,11 @@ function createClonePromise(https_clone: string, destPath): Promise<string> {
     });
 }
 
+/**
+ * Checks if the repo at `destPath` has already been cloned
+ * @param destPath
+ * @returns
+ */
 function checkAlreadyCloned(destPath: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
         exec(`cd ${destPath} && git remote -v`, (err, stdout, stderr) => {

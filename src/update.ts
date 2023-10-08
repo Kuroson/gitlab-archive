@@ -33,6 +33,11 @@ export async function main(): Promise<void> {
     }
 }
 
+/**
+ * Fetch all changes from remote
+ * @param destPath
+ * @returns
+ */
 function gitFetch(destPath: string): Promise<void> {
     return new Promise<void>((resolve, reject) => {
         exec(`cd ${destPath} && git fetch --all`, (err, stdout, stderr) => {
@@ -50,6 +55,11 @@ function gitFetch(destPath: string): Promise<void> {
     });
 }
 
+/**
+ * Reset branch to default (main or master)
+ * @param destPath
+ * @returns
+ */
 function resetMaster(destPath: string): Promise<void> {
     return new Promise<void>((resolve, reject) => {
         exec(
@@ -70,6 +80,11 @@ function resetMaster(destPath: string): Promise<void> {
     });
 }
 
+/**
+ * Attempt to checkout all branches
+ * @param destPath
+ * @returns
+ */
 function checkoutAllBranches(destPath: string): Promise<void> {
     const command = "for b in `git branch -r | grep -v -- '->'`; do git branch --track ${b##origin/} $b; done";
     return new Promise<void>((resolve, reject) => {
