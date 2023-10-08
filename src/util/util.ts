@@ -5,6 +5,9 @@ import Stack from "./Stack";
 
 const BLACK_LIST = validateEnv.BLACK_LIST.split(",").map((x) => x.toLowerCase());
 
+/**
+ * Simplified data representation of queried GitLab data
+ */
 export type ProjectInfo = {
     id: string;
     name: string;
@@ -14,6 +17,12 @@ export type ProjectInfo = {
     web_url: string;
 };
 
+/**
+ * Get all projects in a group recursively
+ * @param api
+ * @param initialGroup initial group as an id or name (string)
+ * @returns tuple of [projects, error]
+ */
 export const getAllProjects = async (
     api: GitlabCore<false>,
     initialGroup: { path: string; id: number },
@@ -60,11 +69,16 @@ export const getAllProjects = async (
     return [allProjects, null];
 };
 
+/**
+ * Query all subgroups of a group
+ * @param api
+ * @param parentGroupName parent group as an id or name (string)
+ * @returns tuple of [subgroups, error]
+ */
 export const querySubgroups = async (
     api: GitlabCore<false>,
     parentGroupName: string | number,
 ): Promise<[GroupSchema[], null] | [null, Error | unknown]> => {
-    // api.Groups.allSubgroups('COMP2511').then((groups) => {});
     try {
         const groups = await api.Groups.allSubgroups(parentGroupName);
         return [groups, null];
@@ -73,6 +87,12 @@ export const querySubgroups = async (
     }
 };
 
+/**
+ * Query all projects of a group
+ * @param api
+ * @param groupID group id
+ * @returns tuple of [projects, error]
+ */
 export const queryProjects = async (
     api: GitlabCore<false>,
     groupID: string | number,
@@ -97,6 +117,11 @@ export const queryProjects = async (
 
 export type FileOutput = Record<number, ProjectInfo>;
 
+/**
+ * Removes the last "/" and text after it or the original string if none
+ * @param inputString
+ * @returns
+ */
 export const removeLastSlashAndText = (inputString: string): string => {
     const lastIndex = inputString.lastIndexOf("/");
 
@@ -109,6 +134,12 @@ export const removeLastSlashAndText = (inputString: string): string => {
     }
 };
 
+/**
+ * Get the group info of a group
+ * @param api
+ * @param id group id or name (string)
+ * @returns tuple of [groupInfo, error]
+ */
 export const getGroupInfo = async (
     api: GitlabCore<false>,
     id: string | number,

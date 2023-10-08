@@ -8,6 +8,9 @@ if (typeof require !== "undefined" && require.main === module) {
     main();
 }
 
+/**
+ * Query all projects recursively and write (or overwrite) to `./backup/table.json`
+ */
 export async function main(): Promise<void> {
     logger.info("Establishing connection to GitLab");
     const api = new Gitlab({

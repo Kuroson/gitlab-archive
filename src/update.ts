@@ -8,6 +8,9 @@ if (typeof require !== "undefined" && require.main === module) {
     main();
 }
 
+/**
+ * Update all repos in `./backup/table.json`
+ */
 export async function main(): Promise<void> {
     const input = JSON.parse(readFileSync(`${validateEnv.BACKUP_DIR}/table.json`, "utf-8")) as FileOutput;
     const repos = Object.values(input);
