@@ -1,4 +1,4 @@
-import { Gitlab as GitlabCore, GroupSchema } from "@gitbeaker/core";
+import { ExpandedGroupSchema, Gitlab as GitlabCore, GroupSchema } from "@gitbeaker/core";
 import validateEnv from "./validateEnv";
 import logger from "./logger";
 import Stack from "./Stack";
@@ -106,5 +106,17 @@ export const removeLastSlashAndText = (inputString: string): string => {
     } else {
         // If there's no "/" in the string, return the original string
         return inputString;
+    }
+};
+
+export const getGroupInfo = async (
+    api: GitlabCore<false>,
+    id: string | number,
+): Promise<[ExpandedGroupSchema, null] | [null, Error | unknown]> => {
+    try {
+        const projectInfo = await api.Groups.show(id, { showExpanded: false, simple: true });
+        return [projectInfo, null];
+    } catch (err) {
+        return [null, err];
     }
 };

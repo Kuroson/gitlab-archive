@@ -1,6 +1,6 @@
 import { Gitlab } from "@gitbeaker/rest";
 import logger from "@util/logger";
-import { FileOutput, ProjectInfo, getAllProjects, querySubgroups } from "@util/util";
+import { FileOutput, ProjectInfo, getAllProjects, getGroupInfo, querySubgroups } from "@util/util";
 import validateEnv from "@util/validateEnv";
 import { writeFileSync } from "fs";
 
@@ -16,9 +16,19 @@ export async function main(): Promise<void> {
     });
 
     const parentGroup = validateEnv.GROUP_PARENT;
+    const [parentGroupInfo, parentGroupInfoErr] = await getGroupInfo(api, parentGroup);
+
+    if (parentGroupInfo === null) {
+        logger.error(`Failed to get group info of ${parentGroup}`);
+        logger.error(parentGroupInfoErr);
+        logger.error(JSON.stringify(parentGroupInfoErr));
+        throw new Error("Failed to get group info");
+    }
+    logger.info(`Parent group: ${parentGroup}, id: ${parentGroupInfo.id}, path: ${parentGroupInfo.path}`);
 
     logger.info(`Querying subgroups of ${parentGroup}`);
     const [groups, err] = await querySubgroups(api, parentGroup);
+
     if (err !== null) {
         logger.error(`Failed to query subgroups of parent group ${parentGroup}`);
         logger.error(err);
@@ -26,11 +36,14 @@ export async function main(): Promise<void> {
     }
     if (groups === null) throw new Error("groups is null");
     logger.info(`Retrieved ${groups.length} subgroups of ${parentGroup}`);
-    const parsedGroups = groups
-        .map((x) => {
+
+    const parsedGroups = [
+        { id: parentGroupInfo.id, path: parentGroupInfo.path },
+        ...groups.map((x) => {
             return { id: x.id, path: x.path };
-        })
-        .sort((x, y) => (x.id > y.id ? 1 : -1));
+        }),
+    ].sort((x, y) => (x.id > y.id ? 1 : -1));
+
     logger.verbose(`Paths: ${parsedGroups.map((x) => x.path).join(", ")}`);
 
     const allProjects: ProjectInfo[] = [];
