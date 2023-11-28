@@ -4,8 +4,11 @@ import winston, { format } from "winston";
 const logger = winston.createLogger({
     format: format.combine(
         format.timestamp({
-            format: moment().tz("Australia/Sydney").format("YYYY-MM-DD HH:mm:ss").toString(),
+            format: () => {
+                return moment().tz("Australia/Sydney").format("YYYY-MM-DD HH:mm:ss").toString();
+            },
         }),
+        format.json(),
         format.printf(
             (info) =>
                 `${info.timestamp} ${info.level}: ${info.message}` + (info.splat !== undefined ? `${info.splat}` : ""),
@@ -17,8 +20,11 @@ const logger = winston.createLogger({
             format: format.combine(
                 format.colorize(),
                 format.timestamp({
-                    format: moment().tz("Australia/Sydney").format("YYYY-MM-DD HH:mm:ss").toString(),
+                    format: () => {
+                        return moment().tz("Australia/Sydney").format("YYYY-MM-DD HH:mm:ss").toString();
+                    },
                 }),
+                format.json(),
                 format.simple(),
                 format.printf(
                     (info) =>
