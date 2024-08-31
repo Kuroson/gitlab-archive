@@ -14,22 +14,37 @@ if (typeof require !== "undefined" && require.main === module) {
 export async function main(): Promise<void> {
     const input = JSON.parse(readFileSync(`${validateEnv.BACKUP_DIR}/table.json`, "utf-8")) as FileOutput;
     const repos = Object.values(input);
+
+    let index = 0;
     for (const repo of repos) {
-        logger.info(`Updating ${repo.path_with_namespace}`);
+        logger.info(
+            `[${String(index + 1).padStart(repos.length.toString().length, "0")}/${repos.length}] Updating ${
+                repo.path_with_namespace
+            }`,
+        );
         try {
             await gitFetch(`${validateEnv.BACKUP_DIR}/${repo.path_with_namespace}`);
         } catch (err) {
-            logger.error(`Failed to fetch ${repo.path_with_namespace}`);
+            logger.error(
+                `[${String(index + 1).padStart(repos.length.toString().length, "0")}/${repos.length}] Failed to fetch ${
+                    repo.path_with_namespace
+                }`,
+            );
             logger.error(err);
         }
 
         try {
             await resetMaster(`${validateEnv.BACKUP_DIR}/${repo.path_with_namespace}`);
         } catch (err) {
-            logger.error(`Failed to reset ${repo.path_with_namespace}`);
+            logger.error(
+                `[${String(index + 1).padStart(repos.length.toString().length, "0")}/${repos.length}] Failed to reset ${
+                    repo.path_with_namespace
+                }`,
+            );
             logger.error(err);
         }
         await checkoutAllBranches(`${validateEnv.BACKUP_DIR}/${repo.path_with_namespace}`);
+        index += 1;
     }
 }
 

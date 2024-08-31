@@ -27,6 +27,7 @@ export const getAllProjects = async (
     api: GitlabCore<false>,
     initialGroup: { path: string; id: number },
 ): Promise<[ProjectInfo[], null] | [null, Error | unknown]> => {
+    let counter = 0;
     const stack = new Stack<{ path: string; id: number }>();
     stack.push(initialGroup);
     const allProjects: ProjectInfo[] = [];
@@ -34,7 +35,11 @@ export const getAllProjects = async (
     while (!stack.isEmpty()) {
         const currentGroup = stack.pop();
         if (currentGroup === undefined) continue;
-        logger.verbose(`Processing ${currentGroup.path} (${currentGroup.id})`);
+        logger.verbose(
+            `[${String(counter + 1).padStart(stack.size().toString().length, "0")}/${stack.size()}] Processing ${
+                currentGroup.path
+            } (${currentGroup.id})`,
+        );
         // Query subgroups of current groupID
         const [groups, groupsErr] = await querySubgroups(api, currentGroup.id);
 
@@ -65,6 +70,7 @@ export const getAllProjects = async (
             continue;
         }
         allProjects.push(...projects);
+        counter += 1;
     }
     return [allProjects, null];
 };

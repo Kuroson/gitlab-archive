@@ -25,31 +25,55 @@ export async function main(): Promise<void> {
     );
 
     logger.info(`Creating ${folders.length} folders`);
-
+    let index = 0;
     for (const folder of folders) {
         try {
             await createFolder(`${validateEnv.BACKUP_DIR}/${folder}`);
-            logger.verbose(`Created folder at ${validateEnv.BACKUP_DIR}/${folder}`);
+            logger.verbose(
+                `[${String(index + 1).padStart(folders.length.toString().length, "0")}/${
+                    folders.length
+                }] Created folder at ${validateEnv.BACKUP_DIR}/${folder}`,
+            );
         } catch (err) {
-            logger.error(`Failed to create folder at ${validateEnv.BACKUP_DIR}/${folder}`);
+            logger.error(
+                `[${String(index + 1).padStart(folders.length.toString().length, "0")}/${
+                    folders.length
+                }] Failed to create folder at ${validateEnv.BACKUP_DIR}/${folder}`,
+            );
             logger.error(err);
             logger.error(JSON.stringify(err));
         }
+        index += 1;
     }
 
-    for (const repo of Object.values(input)) {
+    let index2 = 0;
+    const repos = Object.values(input);
+    for (const repo of repos) {
         const fullPath = `${validateEnv.BACKUP_DIR}/${repo.path_with_namespace}`;
         if (await checkAlreadyCloned(fullPath)) {
-            logger.info(`${repo.path_with_namespace} already cloned`);
+            logger.info(
+                `[${String(index2 + 1).padStart(repos.length.toString().length, "0")}/${repos.length}] ${
+                    repo.path_with_namespace
+                } already cloned`,
+            );
         } else {
-            logger.info(`Cloning ${repo.path_with_namespace}`);
+            logger.info(
+                `[${String(index2 + 1).padStart(repos.length.toString().length, "0")}/${repos.length}] Cloning ${
+                    repo.path_with_namespace
+                }`,
+            );
             try {
                 await createClonePromise(repo.http_url_to_repo, fullPath);
             } catch (err) {
-                logger.error(`Failed to clone ${repo.path_with_namespace}`);
+                logger.error(
+                    `[${String(index2 + 1).padStart(repos.length.toString().length, "0")}/${
+                        repos.length
+                    }] Failed to clone ${repo.path_with_namespace}`,
+                );
                 logger.error(err);
             }
         }
+        index2 += 1;
     }
 }
 

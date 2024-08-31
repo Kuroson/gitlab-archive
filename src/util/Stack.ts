@@ -12,4 +12,6 @@ export default class Stack<T> {
     public isEmpty = (): boolean => {
         return this.items.length === 0;
     };
+
+    public size = (): number => this.items.length;
 }
