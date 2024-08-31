@@ -1,5 +1,11 @@
 # archive
 
+## 1.0.1
+
+### Patch Changes
+
+-   20bb417: Add some logging numbers
+
 ## 1.0.0
 
 ### Major Changes
