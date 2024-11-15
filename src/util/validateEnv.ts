@@ -28,6 +28,10 @@ const validateEnv = cleanEnv(process.env, {
      * The parent group to start querying from. Could be id or name (string)
      */
     GROUP_PARENT: str(),
+    /**
+     * Run specifically a part
+     */
+    RUN_PART: str({ default: "ALL", choices: ["QUERY", "CLONE", "UPDATE", "ALL"] }),
 });
 
 export default validateEnv;
