@@ -83,9 +83,10 @@ export async function main(): Promise<void> {
  */
 async function createFolder(path: string): Promise<void> {
     try {
-        await exec(`mkdir -p ${path}`);
+        exec(`mkdir -p ${path}`);
+        await new Promise((resolve) => setTimeout(resolve, 100));
     } catch (err) {
-        throw new Error(`Failed to create folder at ${path}`);
+        throw new Error(`Failed to create folder at ${path}, ${JSON.stringify(err)}`);
     }
 }
 
