@@ -15,7 +15,7 @@ export async function main(): Promise<void> {
     const input = JSON.parse(readFileSync(`${validateEnv.BACKUP_DIR}/table.json`, "utf-8")) as FileOutput;
     const repos = Object.values(input);
 
-    const BATCH_SIZE = 25;
+    const BATCH_SIZE = 100;
     let index = 0;
 
     while (index < repos.length) {
