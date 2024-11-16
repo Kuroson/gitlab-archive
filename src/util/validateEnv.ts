@@ -31,7 +31,7 @@ const validateEnv = cleanEnv(process.env, {
     /**
      * Run specifically a part
      */
-    RUN_PART: str({ default: "ALL", choices: ["QUERY", "CLONE", "UPDATE", "ALL"] }),
+    RUN_PART: str({ default: "ALL", choices: ["QUERY", "CLONE", "UPDATE", "ALL", "BATCH_UPDATE"] }),
 });
 
 export default validateEnv;

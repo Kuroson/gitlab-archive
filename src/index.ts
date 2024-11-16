@@ -1,4 +1,5 @@
 import { main as updateMain } from "./update";
+import { main as updateMainBatch } from "./batchUpdate";
 import { main as updateClone } from "./clone";
 import { main as updateQuery } from "./query";
 import validateEnv from "@util/validateEnv";
@@ -18,5 +19,7 @@ async function main(): Promise<void> {
         await updateClone();
     } else if (validateEnv.RUN_PART === "UPDATE") {
         await updateMain();
+    } else if (validateEnv.RUN_PART === "BATCH_UPDATE") {
+        await updateMainBatch();
     }
 }
